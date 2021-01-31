@@ -287,6 +287,7 @@ const MyResponsiveLine = ({ data /* see data tab */ }) => (
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
+          tickValues: ['Jan 04 2016', 'Apr 15 2016', 'Jul 25 2016', 'Dec 23 2016'],
           legend: 'transportation',
           legendOffset: 36,
           legendPosition: 'middle'
@@ -300,6 +301,8 @@ const MyResponsiveLine = ({ data /* see data tab */ }) => (
           legendOffset: -40,
           legendPosition: 'middle'
       }}
+      enablePoints={false}
+      enableGridX={false}
       colors={{ scheme: 'nivo' }}
       pointSize={10}
       pointColor={{ theme: 'background' }}
