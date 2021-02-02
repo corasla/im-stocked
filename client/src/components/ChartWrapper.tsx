@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import StockClient from '../services/stocksClientService'
 import Chart from './Chart'
 
 const data = [{
@@ -261,6 +262,16 @@ const data = [{
 }]
 
 export default function ChartWrapper() {
+  useEffect(() => {
+    // get my singleton ref
+    const stocksClientService = StockClient.getClient()
+    // stocksClientService.getCompanies()
+    // stocksClientService.getStockSymbols()
+    stocksClientService.searchForSymbolOrCompany('AAPL').then((data) => {
+      console.log('data -> ', data)
+    })
+    console.log('using ze effect')
+  })
   return (
     <Chart data={data}></Chart>
   )
