@@ -1,10 +1,56 @@
-import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react'
+import { AxiosResponse } from 'axios'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Chip from '@material-ui/core/Chip'
+import Grid from '@material-ui/core/Grid'
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns'
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers'
 
+import stocksClientService from '../services/stocksClientService'
+import { IStockInformation, IStockSymbolInformation } from '../interfaces'
 import ChartWrapper from '../components/ChartWrapper'
+const moment = require('moment')
 
 export default function MainPage() {
+  const initialQueryValue = 'AAPL'
+  const [startDate, setStartDate] = React.useState<Date | null>(
+    moment().subtract(7, 'days').toDate()
+  )
+  const [endDate, setEndDate] = React.useState<Date | null>(
+    moment().toDate()
+  )
+  const [chartData, setChartData] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [company, setCompany] = useState('Loading...')
+  const [alternateStocks, setAlternateStocks] = useState([] as IStockSymbolInformation[])
+  const [query, setQuery] = useState(initialQueryValue)
+  const [lastQueryValue, setLastQueryValue] = useState(initialQueryValue)
+  const getStockInformation = async () => {
+    setLoading(true)
+    const stockInformation: AxiosResponse<IStockInformation> = await stocksClientService.getStockInformationFor(query, startDate, endDate)
+    const {
+      data,
+      targetCompany,
+      alternateSymbolsForQuery
+    } = stockInformation.data
+    setCompany(targetCompany)
+    console.log('gotz -> ', stockInformation)
+    setLoading(false)
+    setAlternateStocks(alternateSymbolsForQuery)
+    setChartData(data)
+  }
+  useEffect(() => {
+    getStockInformation()
+    console.log('using ze effect')
+  }, [])
+
   const useStyles = makeStyles((theme: Theme) =>
   createStyles({
       root: {
@@ -14,23 +60,128 @@ export default function MainPage() {
       },
     }),
   )
-  const classes = useStyles();
+  const classes = useStyles()
+
+  const stateWithData = () => {
+    return (
+      <div>
+        <div>Showing data for {company}</div>
+        <ChartWrapper data={chartData}></ChartWrapper>
+      </div>
+    )
+  }
+
+  const handleQueryChange = (event) => {
+    debugger
+    const {
+      value
+    } = event.currentTarget
+    setQuery(value.trim())
+  }
+
+  const queryNewData = () => {
+    if (query?.length > 0 && lastQueryValue !== query) {
+      setLastQueryValue(query)
+      getStockInformation()
+    }
+  }
+
+  const handleEnterKey = (event) => {
+    if (event.key === 'Enter') {
+      queryNewData()
+    }
+  }
+
+  const clickedAlternateStockSymbol = (symbol) => () => {
+    console.log('clicky -> ', symbol)
+    setQuery(symbol)
+    setLastQueryValue(query)
+    getStockInformation()
+  }
+
+  const alternateStockChips = () => {
+    if (!alternateStocks?.length || Object.keys(alternateStocks[0]).length === 0) {
+      return null
+    }
+    return (
+      alternateStocks.map(stock => {
+        return <Chip label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
+      })
+    )
+  }
+
+  const startDateChanged = (date: Date | null) => {
+    setStartDate(date)
+  }
+  const endDateChanged = (date: Date | null) => {
+    setEndDate(date)
+  }
+
+  const datepickerComponent = () => {
+    return (
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Grid container justify="space-around">
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="date-picker-start"
+            label="StartDate"
+            value={startDate}
+            onChange={startDateChanged}
+            KeyboardButtonProps={{
+              'aria-label': 'change start date',
+            }}
+          />
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="date-picker-end"
+            label="StartDate"
+            value={endDate}
+            onChange={endDateChanged}
+            KeyboardButtonProps={{
+              'aria-label': 'change end date',
+            }}
+          />
+        </Grid>
+      </MuiPickersUtilsProvider>
+    )
+  }
+
   return (
     <div>
-      <header>omg</header>
       <div>
         <div>
           <div className={classes.root}>
-            <Button variant="contained" color="primary">
-              Somethin
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              value={query}
+              onKeyDown={handleEnterKey}
+              onChange={handleQueryChange}
+            />
+            {datepickerComponent()}
+            <Button
+              disabled={loading}
+              variant="contained"
+              color="primary"
+              onClick={queryNewData}
+              >
+              Let's go!
             </Button>
           </div>
         </div>
         <div>
-          <ChartWrapper></ChartWrapper>
+          {loading && <CircularProgress />}
+          {!loading && alternateStockChips()}
+          {!loading && stateWithData()}
         </div>
       </div>
-      <footer>footer</footer>
     </div>
   )
 }
