@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { AxiosResponse } from 'axios'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -93,6 +93,7 @@ export default function MainPage() {
   const clickedAlternateStockSymbol = (symbol) => () => {
     setQuery(symbol)
     setLastQueryValue(query)
+    setShouldQuery(shouldQuery + 1)
   }
 
   const alternateStockChips = () => {
@@ -100,9 +101,14 @@ export default function MainPage() {
       return null
     }
     return (
-      alternateStocks.map(stock => {
-        return <Chip label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
-      })
+      <Fragment>
+        <span>Here are some similar stock symbols that matched your search</span>
+        {
+          alternateStocks.slice(0, 4).map(stock => {
+            return <Chip label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
+          })
+        }
+      </Fragment>
     )
   }
 
