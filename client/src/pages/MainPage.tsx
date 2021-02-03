@@ -108,7 +108,7 @@ export default function MainPage() {
         <h3>You may explore other stock symbols that matched your search by clicking them</h3>
         <div className="chips-bowl">
           {
-            alternateStocks.slice(0, 4).map(stock => {
+            alternateStocks.slice(1, 5).map(stock => {
               return <Chip className="chip-item" key={stock.symbol} label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
             })
           }

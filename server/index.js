@@ -9,7 +9,8 @@ app.use(cors())
 
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-const token = 'sandbox_c0c37sn48v6o915a17h0'
+// const token = 'sandbox_c0c37sn48v6o915a17h0' // sandbox
+const token = 'c0c37sn48v6o915a17gg' // real
 api_key.apiKey = token
 const finnhubClient = new finnhub.DefaultApi()
 
