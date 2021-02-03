@@ -34,8 +34,6 @@ app.get('/stock_data', async (req, res) => {
     symbolMatch = hashedQueryResults[str]
   }
 
-  console.log(symbolMatch)
-
   if (!symbolMatch || !symbolMatch.count) {
     res.send({error: 'Query could not be resolved, try something else'})
   }

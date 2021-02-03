@@ -34,8 +34,8 @@ export default function ChartWrapper({data}) {
       })
     }
 
-    const totalLength = data.l.length
-    const diffBetweenMinAndMax = (foundMax-foundMin)
+    // const totalLength = data.l.length
+    // const diffBetweenMinAndMax = (foundMax-foundMin)
     const newMeta = {
       // max: foundMax,
       // min: foundMin
@@ -46,7 +46,7 @@ export default function ChartWrapper({data}) {
     }
     setMeta(newMeta)
     setChartData(newChartData)
-    console.log('another 111', newMeta, newChartData)
+    console.log('[Chart Wrapper]', newMeta, newChartData)
   }, [data])
   return (
     <div>

@@ -26,6 +26,7 @@ export default function MainPage() {
   const [endDate, setEndDate] = React.useState<Date | null>(
     moment().toDate()
   )
+  const [shouldQuery, setShouldQuery] = useState(0)
   const [chartData, setChartData] = useState({})
   const [loading, setLoading] = useState(false)
   const [company, setCompany] = useState('Loading...')
@@ -41,15 +42,13 @@ export default function MainPage() {
       alternateSymbolsForQuery
     } = stockInformation.data
     setCompany(targetCompany)
-    console.log('gotz -> ', stockInformation)
     setLoading(false)
     setAlternateStocks(alternateSymbolsForQuery)
     setChartData(data)
   }
   useEffect(() => {
     getStockInformation()
-    console.log('using ze effect')
-  }, [])
+  }, [shouldQuery]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,31 +71,28 @@ export default function MainPage() {
   }
 
   const handleQueryChange = (event) => {
-    debugger
     const {
       value
     } = event.currentTarget
     setQuery(value.trim())
   }
 
-  const queryNewData = () => {
+  const checkIfWeNeedToQueryForNewData = () => {
     if (query?.length > 0 && lastQueryValue !== query) {
       setLastQueryValue(query)
-      getStockInformation()
+      setShouldQuery(shouldQuery + 1)
     }
   }
 
   const handleEnterKey = (event) => {
     if (event.key === 'Enter') {
-      queryNewData()
+      checkIfWeNeedToQueryForNewData()
     }
   }
 
   const clickedAlternateStockSymbol = (symbol) => () => {
-    console.log('clicky -> ', symbol)
     setQuery(symbol)
     setLastQueryValue(query)
-    getStockInformation()
   }
 
   const alternateStockChips = () => {
@@ -170,7 +166,7 @@ export default function MainPage() {
               disabled={loading}
               variant="contained"
               color="primary"
-              onClick={queryNewData}
+              onClick={checkIfWeNeedToQueryForNewData}
               >
               Let's go!
             </Button>

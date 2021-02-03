@@ -68,7 +68,7 @@ const RenderedChart = ({data, meta}) => {
 }
 
 export default function Chart({data: chartData, meta}) {
-  console.log('rendering -> ', chartData, meta)
+  console.log('[Chart] rendering -> ', chartData, meta)
   return (
     <div className="chart-wrapper">
       <RenderedChart data={chartData} meta={meta}></RenderedChart>
