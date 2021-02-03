@@ -31,7 +31,7 @@ export default function MainPage() {
   const [shouldQuery, setShouldQuery] = useState(0)
   const [minDate, setMinDate] = useState(moment().subtract(7, 'days').toDate())
   const [chartData, setChartData] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [company, setCompany] = useState('Loading...')
   const [alternateStocks, setAlternateStocks] = useState([] as IStockSymbolInformation[])
   const [query, setQuery] = useState(initialQueryValue)
@@ -56,7 +56,7 @@ export default function MainPage() {
   const stateWithData = () => {
     return (
       <div>
-        <div>Showing data for {company}</div>
+        <h3>Showing data for {company}</h3>
         <ChartWrapper data={chartData}></ChartWrapper>
       </div>
     )
@@ -93,14 +93,16 @@ export default function MainPage() {
       return null
     }
     return (
-      <Fragment>
-        <span>Here are some similar stock symbols that matched your search</span>
-        {
-          alternateStocks.slice(0, 4).map(stock => {
-            return <Chip key={stock.symbol} label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
-          })
-        }
-      </Fragment>
+      <div className="text-and-chips-yum">
+        <h3>You may explore other stock symbols that matched your search by clicking them</h3>
+        <div className="chips-bowl">
+          {
+            alternateStocks.slice(0, 4).map(stock => {
+              return <Chip className="chip-item" key={stock.symbol} label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
+            })
+          }
+        </div>
+      </div>
     )
   }
 
@@ -108,7 +110,6 @@ export default function MainPage() {
     if (!date || isNaN(date as any)) {
       return
     }
-    debugger
     let newDate = date
     setStartDate(newDate)
   }
@@ -116,7 +117,6 @@ export default function MainPage() {
     if (!date || isNaN(date as any)) {
       return
     }
-    debugger
     let newDate = date
     setMinDate(moment(newDate).subtract(7, 'days').toDate())
     if (moment(newDate).diff(moment(startDate), 'days') < 6) {
@@ -168,10 +168,19 @@ export default function MainPage() {
     )
   }
 
+  const loadingProgressState = () => {
+    return (
+      <div className="loading-wrapper">
+        <span>Loading data...</span>
+        <CircularProgress />
+      </div>
+    )
+  }
+
   return (
     <div className="MainPage">
-      <div>
-        <div>
+      <div className="main-wrapper">
+        <div className="options-wrapper">
           <div className="options-container">
             <TextField
               id="outlined-basic"
@@ -194,8 +203,8 @@ export default function MainPage() {
             </Button>
           </div>
         </div>
-        <div>
-          {loading && <CircularProgress />}
+        <div className="info-and-chart-wrapper">
+          {loading && loadingProgressState()}
           {!loading && alternateStockChips()}
           {!loading && stateWithData()}
         </div>

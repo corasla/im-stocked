@@ -6,19 +6,12 @@ $main-color: #18475c;
   flex-direction: column;
   .chart-wrapper {
     height: 400px;
+    border-radius: 4px;
+    margin-top: 50px;
+    border: 1px solid #c3c3c3;
   }
 
   header {
-    height: 100px;
-    display: inline-block;
-    width: 100%;
-    background-color: $main-color;
-  }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
     height: 100px;
     display: inline-block;
     width: 100%;

@@ -5,34 +5,74 @@ $button-width: 100px;
 .MainPage {
   margin: 20px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  .options-container {
+  max-width: 800px;
+  align-self: center;
+  max-width: calc(100% - 40px);
+
+  .main-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .loading-wrapper {
+    margin-top: 20px;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    span {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
 
-    // background-color: #27799cf2;
-    border-radius: 4px;
+  .text-and-chips-yum {
+    display: flex;
+    flex-direction: column;
 
-    .datepicker-containers {
-      max-width: $datepicker-container-width;
-      .datepicker {
-        width: 140px;
+    .chips-bowl {
+      display: flex;
+      flex-direction: row;
+
+      .chip-item {
+        margin-right: 10px;
       }
     }
 
-    .actionable-item-container {
-      margin: $margin-between-elements;
-    }
+    margin-bottom: 40px;
+  }
 
-    .button {
-      width: $button-width;
-    }
+  .info-and-chart-wrapper {
+    width: 100%;
+  }
 
-    .textfield {
-      width: $textfield-width;
+  .options-wrapper {
+    width: 100%;
+    .options-container {
+      display: flex;
+      align-items: center;
+      // justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+  
+      .datepicker-containers {
+        max-width: $datepicker-container-width;
+        .datepicker {
+          width: 140px;
+        }
+      }
+  
+      .actionable-item-container {
+        margin: $margin-between-elements;
+      }
+  
+      .button {
+        width: $button-width;
+      }
+  
+      .textfield {
+        width: $textfield-width;
+      }
     }
   }
 }

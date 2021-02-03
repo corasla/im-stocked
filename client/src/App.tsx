@@ -26,7 +26,6 @@ export default class App extends React.Component {
         <div className="App">
           <header></header>
           <MainPage></MainPage>
-          <footer></footer>
         </div>
       </MuiThemeProvider>
     )

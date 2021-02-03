@@ -39,8 +39,8 @@ export default function ChartWrapper({data}) {
   }, [data])
   return (
     <div>
-      {!data && <span>No data available</span>}
-      <Chart data={chartData} meta={meta}></Chart>
+      {!data && <h2>No data available</h2>}
+      {data && <Chart data={chartData} meta={meta}></Chart>}
     </div>
   )
 }
