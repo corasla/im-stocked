@@ -1,0 +1,34 @@
+$datepicker-container-width: 300px;
+$margin-between-elements: 12px;
+$textfield-width: 160px;
+$button-width: 100px;
+.MainPage {
+  margin: 20px;
+  .options-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    // background-color: #27799cf2;
+    border-radius: 4px;
+
+    .datepicker-containers {
+      max-width: $datepicker-container-width;
+      .datepicker {
+        width: 140px;
+      }
+    }
+
+    .actionable-item-container {
+      margin: $margin-between-elements;
+    }
+
+    .button {
+      width: $button-width;
+    }
+
+    .textfield {
+      width: $textfield-width;
+    }
+  }
+}

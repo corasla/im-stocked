@@ -1,6 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import { AxiosResponse } from 'axios'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -16,6 +15,9 @@ import {
 import stocksClientService from '../services/stocksClientService'
 import { IStockInformation, IStockSymbolInformation } from '../interfaces'
 import ChartWrapper from '../components/ChartWrapper'
+
+import './MainPage.scss'
+
 const moment = require('moment')
 
 export default function MainPage() {
@@ -49,17 +51,6 @@ export default function MainPage() {
   useEffect(() => {
     getStockInformation()
   }, [shouldQuery]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-      root: {
-        '& > *': {
-          margin: theme.spacing(1),
-        },
-      },
-    }),
-  )
-  const classes = useStyles()
 
   const stateWithData = () => {
     return (
@@ -122,7 +113,8 @@ export default function MainPage() {
   const datepickerComponent = () => {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container justify="space-around">
+        <Grid container justify="space-around"
+          className="datepicker-containers actionable-item-container">
           <KeyboardDatePicker
             disableToolbar
             variant="inline"
@@ -130,6 +122,7 @@ export default function MainPage() {
             margin="normal"
             id="date-picker-start"
             label="From"
+            className="datepicker"
             value={startDate}
             onChange={startDateChanged}
             KeyboardButtonProps={{
@@ -143,6 +136,7 @@ export default function MainPage() {
             margin="normal"
             id="date-picker-end"
             label="To"
+            className="datepicker"
             value={endDate}
             onChange={endDateChanged}
             KeyboardButtonProps={{
@@ -155,14 +149,15 @@ export default function MainPage() {
   }
 
   return (
-    <div>
+    <div className="MainPage">
       <div>
         <div>
-          <div className={classes.root}>
+          <div className="options-container">
             <TextField
               id="outlined-basic"
               label="Stock or Company"
               variant="outlined"
+              className="actionable-item-container textfield"
               value={query}
               onKeyDown={handleEnterKey}
               onChange={handleQueryChange}
@@ -172,6 +167,7 @@ export default function MainPage() {
               disabled={loading}
               variant="contained"
               color="primary"
+              className="actionable-item-container button"
               onClick={checkIfWeNeedToQueryForNewData}
               >
               Let's go!
