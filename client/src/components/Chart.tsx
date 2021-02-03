@@ -17,10 +17,9 @@ const RenderedChart = ({data, meta}) => {
       axisTop={null}
       axisRight={null}
       tooltip={(input) => {
-        console.log(input.point)
         return (
         <div>
-          <div style={tooltipStyle}>${input.point.y} on {input.point.x}</div>
+          <div style={tooltipStyle}>${input.point.data.y} on {input.point.data.xFormatted}</div>
         </div>
       )}}
       axisBottom={{
@@ -37,13 +36,13 @@ const RenderedChart = ({data, meta}) => {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'count',
           legendOffset: -40,
-          legendPosition: 'middle'
+          legendPosition: 'middle',
+          format: '$'
       }}
       enablePoints={true}
       enableGridX={false}
-      colors={{ scheme: 'nivo' }}
+      colors={{ scheme: 'category10' }}
       pointSize={4}
       pointColor={{ theme: 'background' }}
       pointBorderWidth={2}
@@ -55,7 +54,6 @@ const RenderedChart = ({data, meta}) => {
 }
 
 export default function Chart({data: chartData, meta}) {
-  console.log('[Chart] rendering -> ', chartData, meta)
   return (
     <div className="chart-wrapper">
       <RenderedChart data={chartData} meta={meta}></RenderedChart>

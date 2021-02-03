@@ -22,13 +22,14 @@ const moment = require('moment')
 
 export default function MainPage() {
   const initialQueryValue = 'AAPL'
-  const [startDate, setStartDate] = React.useState<Date | null>(
+  const [startDate, setStartDate] = useState<Date | null>(
     moment().subtract(7, 'days').toDate()
   )
-  const [endDate, setEndDate] = React.useState<Date | null>(
+  const [endDate, setEndDate] = useState<Date | null>(
     moment().toDate()
   )
   const [shouldQuery, setShouldQuery] = useState(0)
+  const [error, setError] = useState<string | null>(null)
   const [minDate, setMinDate] = useState(moment().subtract(7, 'days').toDate())
   const [chartData, setChartData] = useState({})
   const [loading, setLoading] = useState(true)
@@ -38,16 +39,23 @@ export default function MainPage() {
   const [lastQueryValue, setLastQueryValue] = useState(initialQueryValue)
   const getStockInformation = async () => {
     setLoading(true)
-    const stockInformation: AxiosResponse<IStockInformation> = await stocksClientService.getStockInformationFor(query, startDate, endDate)
-    const {
-      data,
-      targetCompany,
-      alternateSymbolsForQuery
-    } = stockInformation.data
-    setCompany(targetCompany)
-    setLoading(false)
-    setAlternateStocks(alternateSymbolsForQuery)
-    setChartData(data)
+    setError(null)
+    try {
+      const stockInformation: AxiosResponse<IStockInformation> = await stocksClientService.getStockInformationFor(query, startDate, endDate)
+      const {
+        data,
+        targetCompany,
+        alternateSymbolsForQuery
+      } = stockInformation.data
+      setCompany(targetCompany)
+      setLoading(false)
+      setAlternateStocks(alternateSymbolsForQuery)
+      setChartData(data)
+    } catch(error) {
+      setError('Error loading data. Please try again.')
+      setLoading(false)
+      setLastQueryValue('')
+    }
   }
   useEffect(() => {
     getStockInformation()
@@ -203,11 +211,16 @@ export default function MainPage() {
             </Button>
           </div>
         </div>
-        <div className="info-and-chart-wrapper">
-          {loading && loadingProgressState()}
-          {!loading && alternateStockChips()}
-          {!loading && stateWithData()}
-        </div>
+        {
+          !error && <div className="info-and-chart-wrapper">
+            {loading && loadingProgressState()}
+            {!loading && alternateStockChips()}
+            {!loading && stateWithData()}
+          </div>
+        }
+        {
+          error && <span>{error}</span>
+        }
       </div>
     </div>
   )
