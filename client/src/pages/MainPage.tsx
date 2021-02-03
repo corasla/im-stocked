@@ -1,6 +1,8 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import { AxiosResponse } from 'axios'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Chip from '@material-ui/core/Chip'
@@ -28,6 +30,7 @@ export default function MainPage() {
   const [endDate, setEndDate] = useState<Date | null>(
     moment().toDate()
   )
+  const [showPlottedMedian, setShowPlottedMedian] = useState(true)
   const [shouldQuery, setShouldQuery] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [minDate, setMinDate] = useState(moment().subtract(7, 'days').toDate())
@@ -65,7 +68,7 @@ export default function MainPage() {
     return (
       <div>
         <h3>Showing data for {company}</h3>
-        <ChartWrapper data={chartData}></ChartWrapper>
+        <ChartWrapper data={chartData} showMedian={showPlottedMedian}></ChartWrapper>
       </div>
     )
   }
@@ -185,6 +188,10 @@ export default function MainPage() {
     )
   }
 
+  const showPlottedMedianChanged = (event) => {
+    setShowPlottedMedian(event.target.checked)
+  }
+
   return (
     <div className="MainPage">
       <div className="main-wrapper">
@@ -200,6 +207,7 @@ export default function MainPage() {
               onChange={handleQueryChange}
             />
             {datepickerComponent()}
+            
             <Button
               disabled={loading}
               variant="contained"
@@ -209,6 +217,16 @@ export default function MainPage() {
               >
               Let's go!
             </Button>
+            <FormControlLabel
+              control={
+                <Checkbox
+                    checked={showPlottedMedian}
+                    onChange={showPlottedMedianChanged}
+                    inputProps={{ 'aria-label': 'show plotted median' }}
+                  />
+              }
+              label="Show Median Line"
+            />
           </div>
         </div>
         {

@@ -1,7 +1,58 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ResponsiveLine } from '@nivo/line'
+import { line } from "d3-shape"
 
-const RenderedChart = ({data, meta}) => {
+const Line = (showMedian) => (chartData) => {
+  const {
+    points,
+    xScale,
+    yScale,
+    data
+  } = chartData
+
+  if (!showMedian) {
+    return null
+  }
+  const medianY = points.reduce((sum, d) => sum + d.y, 0) / points.length
+  const average = (points.reduce((sum, d) => sum + d.data.y, 0) / points.length).toFixed(2)
+  const lineGenerator = line()
+    .x(point => {
+      return point.x
+    })
+    .y(() => {
+      return medianY
+    })
+
+  const denominator = points.length > 20 ? Math.ceil(points.length / 20) : 1
+
+  return (
+    <Fragment>
+      <path
+        d={lineGenerator(points)}
+        fill="none"
+        stroke="#f00"
+        style={{ pointerEvents: "none" }}
+      />
+      {points.slice(0, 20).map(point => (
+        <circle
+          key={point.index}
+          cx={point.x * denominator}
+          cy={medianY}
+          r={2}
+          fill="white"
+          stroke={"#f00"}
+          style={{ pointerEvents: "none" }}
+        />
+      ))}
+      <text
+        x={points[points.length-1].x}
+        y={medianY}
+      >${average} (avg)</text>
+    </Fragment>
+  );
+};
+
+const RenderedChart = ({data, meta, showMedian}) => {
   const tooltipStyle = {
     backgroundColor:'#fff',
     borderRadius: '4px',
@@ -50,13 +101,14 @@ const RenderedChart = ({data, meta}) => {
       pointLabelYOffset={-12}
       areaOpacity={1}
       useMesh={true}
+      layers={['grid', 'markers', 'axes', 'areas', 'crosshair', 'lines', 'points', Line(showMedian), 'slices', 'mesh', 'legends']}
   />
 }
 
-export default function Chart({data: chartData, meta}) {
+export default function Chart({data: chartData, meta, showMedian}) {
   return (
     <div className="chart-wrapper">
-      <RenderedChart data={chartData} meta={meta}></RenderedChart>
+      <RenderedChart data={chartData} meta={meta} showMedian={showMedian}></RenderedChart>
     </div>
   )
 }

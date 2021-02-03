@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Chart from './Chart'
 const moment = require('moment')
 
-export default function ChartWrapper({data}) {
+export default function ChartWrapper({data, showMedian}) {
   const [chartData, setChartData] = useState([])
   const [meta, setMeta] = useState({})
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function ChartWrapper({data}) {
   return (
     <div>
       {!data && <h2>No data available</h2>}
-      {data && <Chart data={chartData} meta={meta}></Chart>}
+      {data && <Chart data={chartData} showMedian={showMedian} meta={meta}></Chart>}
     </div>
   )
 }
