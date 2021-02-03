@@ -34,7 +34,6 @@ export default function ChartWrapper({data}) {
         moment.unix(data.t[totalLength - 1]).format('YYYY-MM-DD')
       ]
     }
-    console.log(newMeta.tickValues)
     setMeta(newMeta)
     setChartData(newChartData)
   }, [data])

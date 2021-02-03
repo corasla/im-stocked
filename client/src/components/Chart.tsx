@@ -40,7 +40,7 @@ const RenderedChart = ({data, meta}) => {
           legendPosition: 'middle',
           format: '$'
       }}
-      enablePoints={true}
+      enablePoints={false}
       enableGridX={false}
       colors={{ scheme: 'category10' }}
       pointSize={4}
