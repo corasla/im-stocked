@@ -4,15 +4,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the CLIENT directory, you can run:
+In the CLIENT directory, you must run (spawn dev server on port 3000):
 
-### `yarn start` or `npm start`
+### `npm start`
 
-In the SERVER directory, you can run:
+In the SERVER directory, you must run (spawn express server on port 4000):
 
-### `yarn start` or `npm start`
+### `npm start`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
+### `npm build`
