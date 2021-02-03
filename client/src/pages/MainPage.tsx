@@ -123,7 +123,7 @@ export default function MainPage() {
             format="MM/dd/yyyy"
             margin="normal"
             id="date-picker-start"
-            label="StartDate"
+            label="From"
             value={startDate}
             onChange={startDateChanged}
             KeyboardButtonProps={{
@@ -136,7 +136,7 @@ export default function MainPage() {
             format="MM/dd/yyyy"
             margin="normal"
             id="date-picker-end"
-            label="StartDate"
+            label="To"
             value={endDate}
             onChange={endDateChanged}
             KeyboardButtonProps={{
@@ -155,7 +155,7 @@ export default function MainPage() {
           <div className={classes.root}>
             <TextField
               id="outlined-basic"
-              label="Outlined"
+              label="Stock or Company"
               variant="outlined"
               value={query}
               onKeyDown={handleEnterKey}
