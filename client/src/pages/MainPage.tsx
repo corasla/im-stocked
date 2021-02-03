@@ -29,6 +29,7 @@ export default function MainPage() {
     moment().toDate()
   )
   const [shouldQuery, setShouldQuery] = useState(0)
+  const [minDate, setMinDate] = useState(moment().subtract(7, 'days').toDate())
   const [chartData, setChartData] = useState({})
   const [loading, setLoading] = useState(false)
   const [company, setCompany] = useState('Loading...')
@@ -69,8 +70,8 @@ export default function MainPage() {
   }
 
   const checkIfWeNeedToQueryForNewData = () => {
-    if (query?.length > 0 && lastQueryValue !== query) {
-      setLastQueryValue(query)
+    if (query?.length > 0 && lastQueryValue !== `${query}${startDate}${endDate}`) {
+      setLastQueryValue(`${query}${startDate}${endDate}`)
       setShouldQuery(shouldQuery + 1)
     }
   }
@@ -83,7 +84,7 @@ export default function MainPage() {
 
   const clickedAlternateStockSymbol = (symbol) => () => {
     setQuery(symbol)
-    setLastQueryValue(query)
+    setLastQueryValue(`${query}${startDate}${endDate}`)
     setShouldQuery(shouldQuery + 1)
   }
 
@@ -96,7 +97,7 @@ export default function MainPage() {
         <span>Here are some similar stock symbols that matched your search</span>
         {
           alternateStocks.slice(0, 4).map(stock => {
-            return <Chip label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
+            return <Chip key={stock.symbol} label={stock.symbol} onClick={clickedAlternateStockSymbol(stock.symbol)} />
           })
         }
       </Fragment>
@@ -104,10 +105,24 @@ export default function MainPage() {
   }
 
   const startDateChanged = (date: Date | null) => {
-    setStartDate(date)
+    if (!date || isNaN(date as any)) {
+      return
+    }
+    debugger
+    let newDate = date
+    setStartDate(newDate)
   }
   const endDateChanged = (date: Date | null) => {
-    setEndDate(date)
+    if (!date || isNaN(date as any)) {
+      return
+    }
+    debugger
+    let newDate = date
+    setMinDate(moment(newDate).subtract(7, 'days').toDate())
+    if (moment(newDate).diff(moment(startDate), 'days') < 6) {
+      setStartDate(moment(newDate).subtract(7, 'days'))
+    }
+    setEndDate(newDate)
   }
 
   const datepickerComponent = () => {
@@ -124,7 +139,10 @@ export default function MainPage() {
             label="From"
             className="datepicker"
             value={startDate}
+            autoOk={true}
+            maxDate={minDate}
             onChange={startDateChanged}
+            disableFuture={true}
             KeyboardButtonProps={{
               'aria-label': 'change start date',
             }}
@@ -139,6 +157,8 @@ export default function MainPage() {
             className="datepicker"
             value={endDate}
             onChange={endDateChanged}
+            disableFuture={true}
+            autoOk={true}
             KeyboardButtonProps={{
               'aria-label': 'change end date',
             }}

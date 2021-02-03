@@ -4,6 +4,10 @@ $textfield-width: 160px;
 $button-width: 100px;
 .MainPage {
   margin: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   .options-container {
     display: flex;
     align-items: center;

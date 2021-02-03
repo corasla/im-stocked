@@ -14,35 +14,24 @@ export default function ChartWrapper({data}) {
       color: "hsl(53, 70%, 50%)",
       data: []
     }]
-    let foundMax = Number.NEGATIVE_INFINITY
-    let foundMin = Number.POSITIVE_INFINITY
+
     for (let i = 0; i < data.l.length; i++) {
-      const min = data.l[i]
-      const max = data.h[i]
-      const average = (min + max) / 2
-      if (max > foundMax) {
-        foundMax = max
-      }
-      if (min < foundMin) {
-        foundMin = min
-      }
       const date = moment.unix(data.t[i]).format('YYYY-MM-DD')
   
       newChartData[0].data.push({
         x: date,
-        y: average,
+        y: (+data.c[i]).toFixed(2),
       })
     }
 
-    // const totalLength = data.l.length
-    // const diffBetweenMinAndMax = (foundMax-foundMin)
+    const totalLength = data.l.length
     const newMeta = {
-      // max: foundMax,
-      // min: foundMin
-      // tickValues: [
-      //   data.t[0],
-      //   data.t[totalLength - 1],
-      // ]
+      tickValues: [
+        moment.unix(data.t[0]).format('YYYY-MM-DD'),
+        moment.unix(data.t[Math.floor(totalLength / 3)]).format('YYYY-MM-DD'),
+        moment.unix(data.t[Math.floor(totalLength * 2 / 3)]).format('YYYY-MM-DD'),
+        moment.unix(data.t[totalLength - 1]).format('YYYY-MM-DD')
+      ]
     }
     setMeta(newMeta)
     setChartData(newChartData)
@@ -51,7 +40,7 @@ export default function ChartWrapper({data}) {
   return (
     <div>
       {!data && <span>No data available</span>}
-      {data && <Chart data={chartData} meta={meta}></Chart>}
+      <Chart data={chartData} meta={meta}></Chart>
     </div>
   )
 }

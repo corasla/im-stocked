@@ -2,20 +2,33 @@ import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 
 const RenderedChart = ({data, meta}) => {
+  const tooltipStyle = {
+    backgroundColor:'#fff',
+    borderRadius: '4px',
+    padding: '4px',
+    border: '1px solid #c3c3c3'
+  }
   return <ResponsiveLine
       data={data}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: 'point' }}
       yScale={{ type: 'linear', min: meta.min || 'auto', max: meta.max || 'auto', reverse: false }}
+      yFormat=" >-$.2f"
       axisTop={null}
       axisRight={null}
+      tooltip={(input) => {
+        console.log(input.point)
+        return (
+        <div>
+          <div style={tooltipStyle}>${input.point.y} on {input.point.x}</div>
+        </div>
+      )}}
       axisBottom={{
           orient: 'bottom',
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          // tickValues: meta?.tickValues ? [...meta.tickValues] : [],
-          legend: 'stock',
+          tickValues: meta?.tickValues ? [...meta.tickValues] : [],
           legendOffset: 36,
           legendPosition: 'middle'
       }}
@@ -28,42 +41,16 @@ const RenderedChart = ({data, meta}) => {
           legendOffset: -40,
           legendPosition: 'middle'
       }}
-      enablePoints={false}
+      enablePoints={true}
       enableGridX={false}
       colors={{ scheme: 'nivo' }}
-      pointSize={10}
+      pointSize={4}
       pointColor={{ theme: 'background' }}
       pointBorderWidth={2}
       pointBorderColor={{ from: 'serieColor', modifiers: [] }}
       pointLabelYOffset={-12}
       areaOpacity={1}
       useMesh={true}
-      // legends={[
-      //     {
-      //         anchor: 'bottom-right',
-      //         direction: 'row',
-      //         justify: false,
-      //         translateX: -1,
-      //         translateY: 49,
-      //         itemsSpacing: 0,
-      //         itemDirection: 'left-to-right',
-      //         itemWidth: 130,
-      //         itemHeight: 20,
-      //         itemOpacity: 0.75,
-      //         symbolSize: 12,
-      //         symbolShape: 'circle',
-      //         symbolBorderColor: 'rgba(0, 0, 0, .5)',
-      //         effects: [
-      //             {
-      //                 on: 'hover',
-      //                 style: {
-      //                     itemBackground: 'rgba(0, 0, 0, .03)',
-      //                     itemOpacity: 1
-      //                 }
-      //             }
-      //         ]
-      //     }
-      // ]}
   />
 }
 
