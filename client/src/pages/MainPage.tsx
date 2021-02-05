@@ -232,6 +232,7 @@ export default function MainPage() {
         {
           !error && <div className="info-and-chart-wrapper">
             {loading && loadingProgressState()}
+            {!loading && <div style={{color:'#f33'}}>Note! We are only displaying MOCK data from finnhub client with sandbox API_KEY. Real data does not work for all stock types and queries on the FREE plan</div>}
             {!loading && alternateStockChips()}
             {!loading && stateWithData()}
           </div>
